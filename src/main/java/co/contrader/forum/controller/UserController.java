@@ -1,6 +1,7 @@
 package co.contrader.forum.controller;
 
 import co.contrader.forum.dto.LoginDTO;
+import co.contrader.forum.dto.SignUpDTO;
 import co.contrader.forum.dto.UserDTO;
 import co.contrader.forum.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,12 @@ public class UserController {
     @RequestMapping("/login")
     public UserDTO login(@RequestBody LoginDTO loginDTO){
         return userService.login(loginDTO);
+    }
+
+    @PostMapping
+    @RequestMapping("/signup")
+    public UserDTO signUp(@RequestBody SignUpDTO signUpDTO){
+        return userService.signUp(signUpDTO);
     }
 
 }

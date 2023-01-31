@@ -18,7 +18,7 @@ public class UserDTO {
     private Long userCreation;
     private String resetPasswordCode;
     private String ActivationCode;
-    private Profile userProfile;
+    private boolean isActive = false;
     private Role userRole;
 
 }

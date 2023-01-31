@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.lang.Nullable;
 
 @Entity
 @Data
@@ -18,13 +19,12 @@ public class User {
     private String userName;
     private String password;
     private Long userCreation;
+    @Nullable
     private String resetPasswordCode;
+    @Nullable
     private String ActivationCode;
-
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    @PrimaryKeyJoinColumn
-    private Profile userProfile;
-
+    private boolean isActive = false;
+    @Nullable
     private Role userRole;
 
 }

@@ -18,7 +18,8 @@ public class Profile {
     private String lastName;
     @Column(unique = true)
     private String eMail;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @MapsId
     private User user;
 
 }
