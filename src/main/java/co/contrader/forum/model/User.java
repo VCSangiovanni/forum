@@ -22,7 +22,7 @@ public class User {
     @Nullable
     private String resetPasswordCode;
     @Nullable
-    private String ActivationCode;
+    private String activationCode;
     private boolean isActive = false;
     @Nullable
     private Role userRole;
