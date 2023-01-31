@@ -3,18 +3,16 @@ package co.contrader.forum.service;
 import co.contrader.forum.dto.*;
 import co.contrader.forum.exception.UserEmailAlreadyExistException;
 import co.contrader.forum.exception.UserNameAlreadyExistException;
+import co.contrader.forum.exception.UserNotActiveException;
 import co.contrader.forum.exception.UserNotFoundException;
 import co.contrader.forum.mapper.ProfileMapper;
 import co.contrader.forum.mapper.UserMapper;
-import co.contrader.forum.model.Profile;
-import co.contrader.forum.model.User;
 import co.contrader.forum.repository.ProfileRepository;
 import co.contrader.forum.repository.UserRepository;
 import co.contrader.forum.utils.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
@@ -32,10 +30,15 @@ public class UserService {
 
 
     public UserDTO login(LoginDTO loginDTO) {
-        UserDTO userDTO = userMapper.toDto(userRepository.findByUserNameAndPassword(loginDTO.getUsername(), loginDTO.getPassword()));
-
-
-        return userDTO;
+        UserDTO userDTO = userMapper
+                .toDto(userRepository.findByUserNameAndPassword(loginDTO.getUsername(), loginDTO.getPassword()));
+        if (userDTO == null){
+            throw new UserNotFoundException();
+        }else if (!userDTO.isActive()){
+            throw new UserNotActiveException();
+        }else {
+            return userDTO;
+        }
     }
 
     public UserDTO signUp(SignUpDTO signUpDTO) {
