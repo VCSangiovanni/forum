@@ -1,16 +1,21 @@
-package co.contrader.forum.dto;
+package co.contrader.forum.auth;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
+@Builder
 @NoArgsConstructor
-public class SignUpDTO {
+@AllArgsConstructor
+public class RegisterRequest {
 
-    private String userName;
+    //User
+    private String username;
     private String password;
+
+    //Profilo
     private String firstName;
     private String lastName;
     private String eMail;

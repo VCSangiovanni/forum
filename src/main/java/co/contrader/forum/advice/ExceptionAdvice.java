@@ -1,9 +1,6 @@
 package co.contrader.forum.advice;
 
-import co.contrader.forum.exception.UserEmailAlreadyExistException;
-import co.contrader.forum.exception.UserNameAlreadyExistException;
-import co.contrader.forum.exception.UserNotActiveException;
-import co.contrader.forum.exception.UserNotFoundException;
+import co.contrader.forum.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -37,6 +34,12 @@ public class ExceptionAdvice {
     @ExceptionHandler(value = {UserNotActiveException.class})
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public String userNotActive(UserNotActiveException e){
+        return e.getMessage();
+    }
+
+    @ExceptionHandler(value = {WrongNameOrPass.class})
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public String wrongCredential (WrongNameOrPass e) {
         return e.getMessage();
     }
 }

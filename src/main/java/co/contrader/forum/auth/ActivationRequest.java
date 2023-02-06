@@ -1,13 +1,15 @@
-package co.contrader.forum.dto;
+package co.contrader.forum.auth;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserActivationDTO {
+public class ActivationRequest {
 
     private String activationCode;
 

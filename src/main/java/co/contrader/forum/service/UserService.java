@@ -9,7 +9,6 @@ import co.contrader.forum.mapper.ProfileMapper;
 import co.contrader.forum.mapper.UserMapper;
 import co.contrader.forum.repository.ProfileRepository;
 import co.contrader.forum.repository.UserRepository;
-import co.contrader.forum.utils.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,55 +27,4 @@ public class UserService {
     @Autowired
     private ProfileRepository profileRepository;
 
-
-    public UserDTO login(LoginDTO loginDTO) {
-        UserDTO userDTO = userMapper
-                .toDto(userRepository.findByUserNameAndPassword(loginDTO.getUsername(), loginDTO.getPassword()));
-        if (userDTO == null){
-            throw new UserNotFoundException();
-        }else if (!userDTO.isActive()){
-            throw new UserNotActiveException();
-        }else {
-            return userDTO;
-        }
-    }
-
-    public UserDTO signUp(SignUpDTO signUpDTO) {
-        if (userRepository.findByUserNameAndPassword(signUpDTO.getUserName(), signUpDTO.getPassword()) != null) {
-            throw new UserNameAlreadyExistException(signUpDTO.getUserName());
-        } else if(profileRepository.findByeMail(signUpDTO.getEMail()) != null){
-           throw new UserEmailAlreadyExistException(signUpDTO.getEMail());
-        }else{
-            UserDTO newUser = new UserDTO();
-            newUser.setUserName(signUpDTO.getUserName());
-            newUser.setPassword(signUpDTO.getPassword());
-            newUser.setUserCreation(System.currentTimeMillis());
-            newUser.setActivationCode(UUID.randomUUID().toString());
-            newUser.setActive(false);
-            ProfileDTO newProfile = new ProfileDTO();
-            newProfile.setFirstName(signUpDTO.getFirstName());
-            newProfile.setLastName(signUpDTO.getLastName());
-            newProfile.setEMail(signUpDTO.getEMail());
-            newProfile.setUser(newUser);
-            profileRepository.save(profileMapper.toEntity(newProfile));
-            return newUser;
-        }
-
-    }
-
-
-    public UserDTO activationUser(UserActivationDTO userActivationDTO) {
-        UserDTO userToActive = userMapper
-                .toDto(userRepository.findByActivationCode(userActivationDTO.getActivationCode()));
-        if(userToActive != null){
-            userToActive.setActive(true);
-            userToActive.setActivationCode(null);
-            userToActive.setUserRole(Role.USER);
-            userRepository.save(userMapper.toEntity(userToActive));
-        }else {
-            throw new UserNotFoundException();
-        }
-        return userToActive;
-
-    }
 }
