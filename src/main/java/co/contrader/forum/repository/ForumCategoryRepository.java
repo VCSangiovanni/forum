@@ -6,4 +6,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ForumCategoryRepository extends JpaRepository<ForumCategory, Long> {
+
+    ForumCategory findByCategoryTitle(String categotyTitle);
+
+
 }

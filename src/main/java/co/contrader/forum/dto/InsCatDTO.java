@@ -1,17 +1,14 @@
 package co.contrader.forum.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
+@Builder
 @AllArgsConstructor
-public class ForumCategoryDTO {
-
-    private Long id;
+@NoArgsConstructor
+public class InsCatDTO {
     private String categoryTitle;
-    public Long createdAt;
-    public Long updatedAt;
-    public UserDTO createdBy;
 }
