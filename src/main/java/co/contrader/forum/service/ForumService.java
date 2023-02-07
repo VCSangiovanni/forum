@@ -2,6 +2,9 @@ package co.contrader.forum.service;
 
 import co.contrader.forum.dto.ForumCategoryDTO;
 import co.contrader.forum.dto.InsCatDTO;
+import co.contrader.forum.exception.BadCredentialException;
+import co.contrader.forum.exception.GenericAlreadyExistException;
+import co.contrader.forum.exception.GenericNotExistExceprion;
 import co.contrader.forum.mapper.FCatMapper;
 import co.contrader.forum.model.ForumCategory;
 import co.contrader.forum.model.User;
@@ -46,10 +49,10 @@ public class ForumService {
                 categoryRepo.save(catToInsert);
                 return fCatMapper.toDto(catToInsert);
             } else {
-                throw new Exception("Only ADMIN or FOUNDER can create Category");
+                throw new BadCredentialException();
             }
         } else {
-            throw new Exception("Category Already Exist");
+            throw new GenericAlreadyExistException();
         }
     }
 
@@ -62,7 +65,7 @@ public class ForumService {
        if (cat.isPresent()) {
            return fCatMapper.toDto(cat.get());
        }else {
-           throw new Exception("Category not Exist");
+           throw new GenericNotExistExceprion();
        }
     }
 
@@ -76,13 +79,13 @@ public class ForumService {
                     catToUpdate.get().setUpdatedAt(System.currentTimeMillis());
                     return fCatMapper.toDto(catToUpdate.get());
                 } else {
-                    throw new Exception("Category Already Exist");
+                    throw new GenericAlreadyExistException();
                 }
             } else {
-                throw new Exception("Only ADMIN or FOUNDER can create Category");
+                throw new BadCredentialException();
             }
         } else {
-            throw new Exception("Category not Exist");
+            throw new GenericNotExistExceprion();
         }
     }
 

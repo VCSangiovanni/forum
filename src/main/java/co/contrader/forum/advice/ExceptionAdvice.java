@@ -42,4 +42,22 @@ public class ExceptionAdvice {
     public String wrongCredential (WrongNameOrPass e) {
         return e.getMessage();
     }
+
+    @ExceptionHandler(value = {GenericAlreadyExistException.class})
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public String genericAlreadyExist(GenericAlreadyExistException e) {
+        return e.getMessage();
+    }
+
+    @ExceptionHandler(value = {GenericNotExistExceprion.class})
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public String genericNotExist (GenericNotExistExceprion e) {
+        return e.getMessage();
+    }
+
+    @ExceptionHandler(value = {BadCredentialException.class})
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public String badCredentialError (BadCredentialException e){
+        return e.getMessage();
+    }
 }
