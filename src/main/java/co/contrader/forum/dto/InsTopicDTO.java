@@ -7,14 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ForumTopicDTO {
+public class InsTopicDTO {
 
-    private Long id;
     private String topicTitle;
     private String topicText;
-    public Long createdAt;
-    public Long updatedAt;
-    private ForumCategoryDTO topicCategory;
-    private UserDTO createdBy;
 
 }

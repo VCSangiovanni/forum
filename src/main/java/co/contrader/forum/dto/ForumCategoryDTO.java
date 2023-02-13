@@ -11,7 +11,7 @@ public class ForumCategoryDTO {
 
     private Long id;
     private String categoryTitle;
-    public Long createdAt;
-    public Long updatedAt;
-    public UserDTO createdBy;
+    private Long createdAt;
+    private Long updatedAt;
+    private UserDTO createdBy;
 }

@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+import org.springframework.lang.Nullable;
 
 @Entity
 @Data
@@ -18,10 +21,11 @@ public class ForumCategory{
     private Long id;
     @Column(unique = true)
     private String categoryTitle;
-    public Long createdAt;
-    public Long updatedAt;
+    private Long createdAt;
+    private Long updatedAt;
 
     @ManyToOne
-    public User createdBy;
+    @Nullable
+    private User createdBy;
 
 }

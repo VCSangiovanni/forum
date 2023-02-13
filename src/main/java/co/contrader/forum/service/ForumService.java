@@ -1,12 +1,15 @@
 package co.contrader.forum.service;
 
-import co.contrader.forum.dto.ForumCategoryDTO;
-import co.contrader.forum.dto.InsCatDTO;
+import co.contrader.forum.dto.*;
 import co.contrader.forum.exception.BadCredentialException;
 import co.contrader.forum.exception.GenericAlreadyExistException;
 import co.contrader.forum.exception.GenericNotExistExceprion;
 import co.contrader.forum.mapper.FCatMapper;
+import co.contrader.forum.mapper.FPMapper;
+import co.contrader.forum.mapper.FTMapper;
 import co.contrader.forum.model.ForumCategory;
+import co.contrader.forum.model.ForumPost;
+import co.contrader.forum.model.ForumTopic;
 import co.contrader.forum.model.User;
 import co.contrader.forum.repository.ForumCategoryRepository;
 import co.contrader.forum.repository.ForumPostRepository;
@@ -31,12 +34,16 @@ public class ForumService {
 
     FCatMapper fCatMapper = FCatMapper.INSTANCE;
 
+    FTMapper ftMapper = FTMapper.INSTANCE;
+
+    FPMapper fpMapper = FPMapper.INSTANCE;
+
 
     /**
      * Category Service
      */
 
-    public ForumCategoryDTO insertCategory(InsCatDTO catDTO) throws Exception {
+    public ForumCategoryDTO insertCategory(InsCatDTO catDTO) {
         if (categoryRepo.findByCategoryTitle(catDTO.getCategoryTitle()) == null) {
             User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             if (user.getUserRole().equals(Role.ADMIN) || user.getUserRole().equals(Role.FOUNDER)) {
@@ -95,6 +102,57 @@ public class ForumService {
 
     public void deleteAll(){
         categoryRepo.deleteAll();
+    }
+
+    /**
+     * Topic Service
+     */
+
+    public ForumTopicDTO insertTopic(InsTopicDTO newTopic, String categoryTitle){
+        if(categoryRepo.findByCategoryTitle(categoryTitle) != null){
+            User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            if (!user.getUserRole().equals(Role.GUEST)){
+                var topicToInsert = ForumTopic.builder()
+                        .topicTitle(newTopic.getTopicTitle())
+                        .topicText(newTopic.getTopicText())
+                        .topicCategory(categoryRepo.findByCategoryTitle(categoryTitle))
+                        .updatedAt(System.currentTimeMillis())
+                        .createdAt(System.currentTimeMillis())
+                        .createdBy(user)
+                        .build();
+                topicRepo.save(topicToInsert);
+                return ftMapper.toDto(topicToInsert);
+            }else {
+                throw new BadCredentialException();
+            }
+        }else {
+            throw new GenericNotExistExceprion();
+        }
+    }
+
+    /**
+     * Post Service
+     */
+
+    public ForumPostDTO insertPost(InsPostDTO newPost, Long topicId){
+        if (topicRepo.findById(topicId).isPresent()){
+            User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            if (!user.getUserRole().equals(Role.GUEST)){
+                var postToInsert = ForumPost.builder()
+                        .postText(newPost.getPostText())
+                        .updatedAt(System.currentTimeMillis())
+                        .createdAt(System.currentTimeMillis())
+                        .forumTopic(topicRepo.findById(topicId).get())
+                        .createdBy(user)
+                        .build();
+                postRepo.save(postToInsert);
+                return fpMapper.toDto(postToInsert);
+            }else {
+                throw new BadCredentialException();
+            }
+        }else {
+            throw new GenericNotExistExceprion();
+        }
     }
 
 }
