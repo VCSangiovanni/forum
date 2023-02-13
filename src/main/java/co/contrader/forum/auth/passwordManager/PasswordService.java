@@ -27,31 +27,24 @@ public class PasswordService {
     private PasswordEncoder passwordEncoder;
 
     public String requestNewPassword(RequestPasswordDTO requestPasswordDTO) {
-        Optional<Profile> userprofile = profileRepository.findByeMail(requestPasswordDTO.getEMail());
-        if (userprofile.isPresent()) {
-            Optional<User> userFromDB = userRepository.findUserByeMail(requestPasswordDTO.getEMail());
-            userFromDB.get().setResetPasswordCode(UUID.randomUUID().toString());
-            userFromDB.get().setPassword(null);
-            userRepository.save(userFromDB.get());
-            return "check your mail " + userFromDB.get().getResetPasswordCode();
+            Profile userFromDB = profileRepository.findByeMail(requestPasswordDTO.getEMail())
+                    .orElseThrow(UserNotFoundException::new);;
+            userFromDB.getUser().setResetPasswordCode(UUID.randomUUID().toString());
+            userFromDB.getUser().setPassword(null);
+            userRepository.save(userFromDB.getUser());
+            return "check your mail " + userFromDB.getUser().getResetPasswordCode();
             //eliminare "+ userFromDB.get().getResetPasswordCode()" in prod
-        } else {
-            throw new UserNotFoundException();
-        }
+
     }
 
     public String setNewPassword(ResetPasswordDTO resetPasswordDTO) {
-        Optional<User> userFromDB = userRepository.findByResetPasswordCode(resetPasswordDTO.getResetPasswordCode());
-        if (userFromDB.isPresent()) {
-            userFromDB.get().setPassword(passwordEncoder.encode(resetPasswordDTO.getNewPassword()));
-            userFromDB.get().setResetPasswordCode(null);
-            userRepository.save(userFromDB.get());
-            return "Password change success " + userFromDB.get();
+        User userFromDB = userRepository.findByResetPasswordCode(resetPasswordDTO.getResetPasswordCode())
+                .orElseThrow(UserNotFoundException::new);
+            userFromDB.setPassword(passwordEncoder.encode(resetPasswordDTO.getNewPassword()));
+            userFromDB.setResetPasswordCode(null);
+            userRepository.save(userFromDB);
+            return "Password change success " + userFromDB;
             //eliminare "+ userFromDB.get()" in prod
-        } else {
-            throw new UserNotFoundException();
-        }
     }
-
 
 }
