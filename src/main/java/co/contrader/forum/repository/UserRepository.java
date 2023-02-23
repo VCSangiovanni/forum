@@ -16,7 +16,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByResetPasswordCode(String resetPasswordCode);
 
-    @Query(value = "SELECT * FROM forum_db.user AS u INNER JOIN forum_db.profile AS p ON id=user_id where e_mail = ?",
-            nativeQuery = true)
-    Optional<User> findUserByeMail(String eMail);
+    User deleteByUsername(String username);
 }
